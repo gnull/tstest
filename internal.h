@@ -39,7 +39,7 @@
  * scm_timestamping использовали struct timespec[3].
  */
 struct scm_timestamping {
-        struct timespec ts[3];
+	struct timespec ts[3];
 };
 
 struct stats {
