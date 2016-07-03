@@ -146,7 +146,7 @@ void stats_print(char *str, const struct stats *ss)
 {
 	double dev, mean;
 
-	printf("%s: ", str);
+	printf("%s: packets %d: ", str, ss->n);
 
 	if (!ss->n) {
 		printf("(none)\n");
