@@ -51,3 +51,17 @@ struct stats {
 void stat_push(struct stats *ss, const struct timespec *ts);
 void stat_print(char *str, const struct stats *ss);
 
+
+int setup_tstamp(int sock, int tsing_flags);
+
+void ts_sub(volatile struct timespec *res,
+	    const struct timespec *a, const struct timespec *b);
+
+void stats_push(struct stats *ss, const struct timespec *ts);
+
+
+int udp_socket(unsigned short port);
+
+int packet_socket(const char *ifname);
+
+void stats_print(char *str, const struct stats *ss);
