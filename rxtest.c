@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "internal.h"
 
 static struct stats stat_user, stat_soft;
@@ -21,7 +23,6 @@ static void rx_tstamp(int sock)
 {
 	char data[datalen], control[controllen];
 	struct cmsghdr *i;
-	struct timeval tv;
 	struct timespec ts, *soft, *hard;
 	int err;
 
@@ -38,7 +39,7 @@ static void rx_tstamp(int sock)
 	err = recvmsg(sock, &msg, 0);
 	if (err < 0)
 		return perror("recvmsg");
-	err = gettimeofday(&tv, NULL);
+	err = clock_gettime(CLOCK_REALTIME, &ts);
 	if (err)
 		perror("gettimeofday");
 
@@ -61,14 +62,12 @@ static void rx_tstamp(int sock)
 	soft = tss->ts;
 	hard = tss->ts + 2;
 
-	tv2ts(&tv, &ts);
-
 	if (!ts_empty(soft)) {
 		ts_sub(&ts, &ts, soft);
 		stats_push(&stat_user, &ts);
 
 		if (!ts_empty(hard)) {
-			ts_sub(&soft, &soft, &hard);
+			ts_sub(soft, soft, hard);
 			stats_push(&stat_soft, soft);
 		}
 	}
